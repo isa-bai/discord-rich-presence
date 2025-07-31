@@ -32,6 +32,23 @@ pub struct Activity<'a> {
 
     #[serde(skip_serializing_if = "Option::is_none", rename = "type")]
     activity_type: Option<ActivityType>,
+
+    #[serde(skip_serializing_if = "Option::is_none")]
+    status_display_type: Option<DisplayType>
+}
+
+/// A struct to set the Display Type of the `Activity`
+#[derive(Serialize_repr, Clone)]
+#[repr(u8)]
+pub enum DisplayType {
+
+    /// Name
+    Name = 0,
+    /// State
+    State = 1,
+    /// Details
+    Details = 2
+
 }
 
 /// A struct representing an `Activity`'s timestamps
@@ -133,6 +150,7 @@ impl<'a> Activity<'a> {
             secrets: None,
             timestamps: None,
             activity_type: None,
+            status_display_type: None
         }
     }
 
@@ -191,6 +209,13 @@ impl<'a> Activity<'a> {
         self.activity_type = Some(activity_type);
         self
     }
+
+    /// Add a `DisplayType` to this activity
+    pub fn status_display_type(mut self, display_type: DisplayType) -> Self {
+        self.status_display_type = Some(display_type);
+        self
+    }
+
 }
 
 impl<'a> Default for Activity<'a> {
